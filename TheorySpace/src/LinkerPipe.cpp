@@ -1,7 +1,9 @@
 // CLinkerPipe.cpp: implementation of the CCLinkerPipe class.
 //
 //////////////////////////////////////////////////////////////////////
+#ifdef _WIN32
 #pragma warning(disable: 4786)
+#endif
 
 #include <winsock2.h>
 #include "LinkerPipe.h"
@@ -18,13 +20,13 @@ namespace ABSTRACT{
 		if(m_Ptr){
 			m_Ptr->IncreUserNum();
 		}
-	};
+    }
 	
 	CLinker::CLinker(CLinker& Linker): m_Ptr(Linker.m_Ptr){
 		Linker.m_Ptr = NULL;
-	};
+    }
 	
-	CLinker& CLinker::operator=(CLinker& Linker)
+    CLinker& CLinker::operator=(const CLinker& Linker)
 	{
 		if(this != &Linker){
 			if (m_Ptr)
@@ -45,7 +47,7 @@ namespace ABSTRACT{
 	bool CLinker::IsValid(){
 		return m_Ptr != NULL;
 		
-	};
+    }
 	
 	const ePipeline& CLinker::GetCompileData()const //用于观察LinkerPipe当前正在组装中的数据
 	{
@@ -94,7 +96,7 @@ namespace ABSTRACT{
 		m_Owner(NULL)
 	{
 		
-	};
+    }
 	
 
 
@@ -118,7 +120,7 @@ namespace ABSTRACT{
 		m_Owner(NULL)
 	{
 
-	};
+    }
 	
 	CLinkerPipe::~CLinkerPipe(){
 		deque<RevContextInfo*>::iterator it = m_ContextStack.begin();
@@ -133,7 +135,7 @@ namespace ABSTRACT{
 		{
 			delete m_Owner;
 		}
-	};
+    }
 	
 	bool IsEqualAddress(ePipeline& Address1,ePipeline& Address2)
 	{
@@ -175,7 +177,7 @@ namespace ABSTRACT{
 			return TRUE;
 		}
 		return FALSE;
-	};
+    }
 	
 	int64  CLinkerPipe::LocalAddress2SenderID(ePipeline& LocalAddress)
 	{
@@ -198,7 +200,7 @@ namespace ABSTRACT{
 		ePipeline& Address = m_LocalAddressList[SenderID];
 		Address<<LocalAddress;
 		return SenderID;
-	};
+    }
 	
 	/* 流式的处理特定CLinkerPipe接收到的信息,此函数对于理解本类非常重要,
 	s为接收到的字节，或多或少
@@ -522,7 +524,7 @@ namespace ABSTRACT{
 				}//while
 			}
       }//while
-};
+}
 
 	void CLinkerPipe::RevOneMsg(eElectron& E){
 		ePipeline* Msg = (ePipeline*)E.Get();
@@ -632,7 +634,7 @@ namespace ABSTRACT{
 			m_Parent->PushCentralNerveMsg(m);			
         }
 
-	};
+    }
 	
 	void CLinkerPipe::BeginErrorState(RevContextInfo* Info,int32 ErrorType)
 	{

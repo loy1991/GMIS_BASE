@@ -63,15 +63,15 @@ protected:
 	ePipeline*  m_MsgPtr;
 	bool        m_bReaded; //已读过，只要使用GetLetter()则设置为true,缺省为false
 public:
-	CMsg();
+    CMsg();
 	//系统任何一个对话主动发信给外部（收信地址为对方缺省的系统对话）
 	CMsg(int64 MsgID,int64 SenderID,int64 EventID); //EventID如果不使用则为0，但这里不设置缺省值=0，以免和下面构造函数混淆
 	//系统内部一个对话给另一个对话发信
 	CMsg(int64 ReceiverID,int64 MsgID,int64 SenderID,int64 EventID); 
 	CMsg(ePipeline& Receiver,int64 MsgID,int64 EventID); //以系统名义给指定地址发信
 
-	CMsg(ePipeline* Msg);	
-	CMsg(CMsg& Msg);
+    CMsg(ePipeline* Msg);
+    CMsg(CMsg& Msg);
 	virtual ~CMsg();	
 	
 	bool IsValid();
@@ -79,8 +79,8 @@ public:
 
 	void Reset(ePipeline* Msg = 0);	
 	ePipeline* Release();
-	
-	CMsg& operator=(CMsg& Msg);
+
+    CMsg& operator=(CMsg& Msg);
 
 	//CMsg类似AutoPtr，只有这个函数是完全产生一个相同的
 	CMsg& Clone(CMsg& Msg);
@@ -103,6 +103,11 @@ public:
 
 	int64 GetEventID();
 	int64 GetSendTimeStamp();
+private:
+    //============================
+    CMsg(const CMsg& Msg){}
+    //=================================
+    CMsg& operator=(const CMsg& Msg){}
 };
 
 #define  GET_LETTER(Msg)       static_cast<ePipeline*>(Msg->GetData(1))

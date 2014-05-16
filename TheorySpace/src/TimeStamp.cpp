@@ -1,8 +1,11 @@
 // TimeStamp.cpp: implementation of the CTimeStamp class.
 //
 //////////////////////////////////////////////////////////////////////
+#ifdef _WIN32
 #pragma warning (disable:4786)
+#endif
 
+#include "Typedef.h"
 #include "TimeStamp.h"
 
 namespace ABSTRACT{

@@ -1,8 +1,10 @@
+#ifdef _WIN32
 #pragma warning(disable:4786)
+#endif
 
 #include "Model.h"
 #include "LinkerPipe.h"
-#include "format.h"
+#include "FORMAT.h"
 
 namespace ABSTRACT{
 
@@ -113,6 +115,8 @@ CLinker Model::CLockedLinkerList::GetNextLinker(int64 SourceID){
 	};
 	
 	map<int64,CLinkerPipe*>::iterator it;
+    map<int64,CLinkerPipe*>::iterator it1;
+
 	if (SourceID == 0)
 	{
 		it = m_LinkerList.begin();
@@ -140,7 +144,10 @@ CLinker Model::CLockedLinkerList::GetNextLinker(int64 SourceID){
 	{
 		if (LinkerType == LINKER_DEL && Linker->GetUserNum()==0)
 		{
-			it = m_LinkerList.erase(it);
+            //it = m_LinkerList.erase(it);
+            it1 = it++;
+            m_LinkerList.erase(it1);
+
 			Linker->Close();
 			delete Linker;
 			Linker = NULL;

@@ -143,8 +143,8 @@ public:
 		~_CInnerIOLock ();
 	};
 	
-	friend _CInnerIOLock;
-	friend CLinker;
+    friend class _CInnerIOLock;
+    friend class CLinker;
 private:
 		int32                m_UseCounter;    //用于Linker引用计数，当有其他线程用Linker引用此类时，避免被删除
 		bool                 m_bThreadUse;    //标记线程IO函数是否在使用此Pipe，避免多线程执行同一个IO
@@ -281,14 +281,14 @@ public: //公开函数必须加锁保证线程安全，同时又要避免递归加锁
 //设计此类的目的主要是管理LinkerPipe的生存期，当LinkerPipe要被删除时，如果其他线程正在使用LinkerPipe，
 //则可以通过此设计避免提前delete
 class CLinker{
-	friend CLinker;
+    friend class CLinker;
 private:
     CLinkerPipe* m_Ptr;
 	CLinker():m_Ptr(NULL){};
 public:
 	CLinker(CLinkerPipe* LinkerPipe);
-	CLinker(CLinker& Linker);
-	CLinker& operator=(CLinker& Linker);
+    CLinker(const CLinker& Linker);
+    CLinker& operator=(const CLinker& Linker);
 	~CLinker();
 	CLinkerPipe& operator()();
 	bool IsValid();

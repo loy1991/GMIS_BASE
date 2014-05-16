@@ -20,6 +20,7 @@
 #include <string>
 #include "Msg.h"
 #include <stdarg.h>
+#include <Typedef.h>
 
 using namespace std;
 
@@ -34,7 +35,7 @@ class ePipeline;
 
 class  eElectron: public Energy{
 
-	friend  ePipeline;
+    friend  class ePipeline;
     Energy* m_Pointer;
 
 public:			
@@ -55,8 +56,8 @@ public:
 		return old;
 	}   
 public:
-	eElectron(Energy* P = NULL):m_Pointer(P){};		
-	eElectron(eElectron& e): m_Pointer(e.Release()){};
+    eElectron(Energy* P = NULL):m_Pointer(P){}
+    eElectron(eElectron& e): m_Pointer(e.Release()){}
     virtual ~eElectron() { 
 		if(m_Pointer)delete m_Pointer; 
 		m_Pointer = NULL;
@@ -89,9 +90,9 @@ public:
 		return m_Pointer->Value(); 
 	}
     
-    int64     Int64(){ return *(int64*)Value();};
-    float64   Float64(){ return *(float64*)Value();};
-    tstring&  String(){ return *(tstring*)Value();};
+    int64     Int64(){ return *(int64*)Value();}
+    float64   Float64(){ return *(float64*)Value();}
+    tstring&  String(){ return *(tstring*)Value();}
     
 
 	void ToString(AnsiString& s){
@@ -112,7 +113,7 @@ public:
 
 class  ePipeline : public Energy  
 {
-	SUPPORT_ABSTRACT_SAPCE_POOL(ePipeline);
+    SUPPORT_ABSTRACT_SAPCE_POOL(ePipeline)
 public:
     typedef deque<Energy*>                  EnergyList;
 	typedef deque<Energy*>::iterator        EnergyPtr;
@@ -134,7 +135,7 @@ public:
 	ePipeline(const TCHAR* Text,uint64 ID = 0);
 	virtual ~ePipeline();
 		
-	ePipeline(const ePipeline& C) { Clone(C);};
+    ePipeline(const ePipeline& C) { Clone(C);}
 	ePipeline& operator=(const ePipeline& C ){
 		if(this != &C)Clone(C);
 		return *this;
@@ -145,7 +146,7 @@ public:
 	//把一个管道里的数据转移到本管道末尾，原管道将失去所有的数据。  
 	ePipeline& operator << (ePipeline& C);
 
-	virtual eType EnergyType(){ return TYPE_PIPELINE;};	 	
+    virtual eType EnergyType(){ return TYPE_PIPELINE;}
 
 	void Clear();
 	
@@ -155,23 +156,23 @@ public:
 	// 完全复制
     void Clone(const ePipeline &C);
   
-	int  Size(){ return m_EnergyList.size();};  
+    int  Size(){ return m_EnergyList.size();}
     int  Length(){ return Size();}
 	
-	void        SetID(uint64 ID){m_ID = ID;};
-	uint64      GetID()const {return m_ID;};
-	tstring&    GetLabel(){ return m_Label;};
-	void        SetLabel(const TCHAR* Text){ m_Label=Text;}; 
+    void        SetID(uint64 ID){m_ID = ID;}
+    uint64      GetID()const {return m_ID;}
+    tstring&    GetLabel(){ return m_Label;}
+    void        SetLabel(const TCHAR* Text){ m_Label=Text;}
 
 	//本管道失效，目前只用于系统内部
 	void Break(){ m_Alive = FALSE;}
 
-	bool IsAlive(){ return m_Alive;};
+    bool IsAlive(){ return m_Alive;}
     void Reuse(){ m_Alive = TRUE;}
 
 	//这表明ePipeline本身也被看作是一种复合数据类型，同样可以被传递。
 	void*  Value()const { return (void *)this;}  
-    Energy* Clone(){ return new ePipeline(*this);};   
+    Energy* Clone(){ return new ePipeline(*this);}
     
 
 	/*Pipeline也是一种基本数据类型，因此它也将被转换成基本的 type@IDlen@ID@Lablelen@Lable@len@data格式，
@@ -483,4 +484,4 @@ public:
 
 }; //namespace ABSTRACT
 
-#endif //  _PIPELINE_H_ 
+#endif //  _PIPELINE_H_

@@ -13,11 +13,18 @@
 #include <assert.h>
 #include <string>
 #include <vector>
-#include <tchar.h>
 #include <iostream> 
 #include <sstream> 
 #include <map>
 #include <list>
+
+#ifdef _WIN32
+#include <tchar.h>
+#else
+#include"auto_tchar.h"
+#include <stdarg.h>
+#include <stdio.h>
+#endif
 
 #ifdef _WIN32
 #define  WIN32_LEAN_AND_MEAN
@@ -145,7 +152,7 @@ public:
 	TypeAB& operator |= (const uint32& t){
 		m_TypeAB |= t;
 		return *this;
-	};
+    }
 
 
 	/*得到指定位置[0-7]的数据类型*/

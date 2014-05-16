@@ -65,7 +65,7 @@ public:
 	};
 
 #else
-	#define SUPPORT_ABSTRACT_SAPCE_POOL(ClassName) 
+    #define SUPPORT_ABSTRACT_SAPCE_POOL(ClassName)
 #endif
 
 }

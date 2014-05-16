@@ -34,7 +34,7 @@ protected:
 	  设置这个变量除了降低CPU的占用率，还因为不同的任务可能有不同的时间敏感度，
 	  就象所有生物平时动作反应一般，但危急时刻则灵敏很多一样。
 
-      GMIS实例作为机器“大脑”，其每一个组织线程都有自己的SleepTime,系统通过这个时间来来
+      GMIP实例作为机器“大脑”，其每一个组织线程都有自己的SleepTime,系统通过这个时间来来
 	  协调整个行为的和谐，比如当收到的信息来不及处理时，系统会调小信息处理线程的间隔时间，
 	  而调大信息接受的间隔时间。相比调整线程的优先级，我们可以让大脑根据具体的任务特点，
 	  通过简单算法来实时调整各个线程所需的SleepTime。
@@ -58,57 +58,57 @@ public:
 		 m_Alive(FALSE),
 		 m_SleepTime(50)
 	{
-	};
+    }
 	Object(tstring Name)
 		:m_Name(Name),
 		 m_Alive(FALSE),
 		 m_SleepTime(50)
 	{
-	};
+    }
 
 	virtual ~Object(){
 	
-	};
+    }
 
-	virtual MASS_TYPE  MassType(){ return MASS_OBJECT;};
-	virtual TypeAB   GetTypeAB(){ return 0;};  
+    virtual MASS_TYPE  MassType(){ return MASS_OBJECT;}
+    virtual TypeAB   GetTypeAB(){ return 0;}
 
 	virtual bool Activation(){
 		if(m_Alive)return TRUE;
 		m_Alive  = TRUE;
  		return TRUE;
-	}	
+    }
 
 	tstring GetName(){
 		return m_Name;
-	};
+    }
 
 	void SetName(tstring Name){
 		m_Name = Name;
 	}
-	virtual bool IsAlive(){ return m_Alive;};
+    virtual bool IsAlive(){ return m_Alive;}
 
 	virtual void Dead(){ 
 		m_Alive = FALSE;
 	}
 
-	void SetObjectSleepTime(int32 ms){m_SleepTime = ms;};
+    void SetObjectSleepTime(int32 ms){m_SleepTime = ms;}
 
 #ifdef _WIN32
-	static unsigned int ObjectDefaultThreadFunc (void* pParam)
-	{
-		Object* This = reinterpret_cast<Object*>(pParam);
-		assert(This != NULL);
-		This->Do(NULL); 
-		return 0;
-	};
+    static unsigned int ObjectDefaultThreadFunc (void* pParam)
+    {
+        Object* This = reinterpret_cast<Object*>(pParam);
+        assert(This != NULL);
+        This->Do(NULL);
+        return 0;
+    }
 #else
-	static void ObjectDefaultThreadFunc (void* pParam)
-	{
-		Object* This = reinterpret_cast<Object*>(pParam);
-		assert(This != NULL);
-		This->Do(NULL); 
-	};
+    static void __attribute__((stdcall)) ObjectDefaultThreadFunc (void* pParam)
+    {
+        Object* This = reinterpret_cast<Object*>(pParam);
+        assert(This != NULL);
+        This->Do(NULL);
+    }
 #endif
 };
 

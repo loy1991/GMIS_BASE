@@ -1,8 +1,10 @@
+#ifdef _WIN32
 #pragma  warning(disable:4786)
+#endif
 
 #include "System.h"
 #include "LinkerPipe.h"
-#include "format.h"
+#include "FORMAT.h"
 namespace ABSTRACT{
 
 //SystemIOWork
@@ -434,8 +436,7 @@ void	System::GetNerveMsgList(ePipeline& Pipe){
 
 void	System::PopNerveMsg(CMsg& Msg){
 	assert(m_Nerve);
-	m_Nerve->Pop(Msg);
-
+	return m_Nerve->Pop(Msg);
 };
 
 

@@ -1,8 +1,11 @@
+#ifdef _WIN32
 #pragma warning(disable:4786)
+#endif
 
 #include "AbstractSpacePool.h"
 #include "Pipeline.h"
 #include <stdio.h>
+#include "GMIS_exception.h"
 
 namespace ABSTRACT{
 
@@ -13,7 +16,7 @@ namespace ABSTRACT{
 		  m_Alive(1),
 		  m_ID(0)
 	{
-	};
+    }
 
 	ePipeline::ePipeline(uint64 ID)
 		: m_Label(),
@@ -22,7 +25,7 @@ namespace ABSTRACT{
 		  m_Alive(1),
 		  m_ID(ID)
 	{
-	};
+    }
 
 	ePipeline::ePipeline(const TCHAR* Text,uint64 ID /*= 0*/)
 		: m_Label(Text),
@@ -31,11 +34,11 @@ namespace ABSTRACT{
 		  m_Alive(1),
 		  m_ID(ID)
 	{
-	};
+    }
 
 	ePipeline::~ePipeline(){
 		Clear();
-	};
+    }
 	void ePipeline::Clone(const ePipeline &C){
 		// 完全复制
 		Clear();
@@ -96,7 +99,7 @@ namespace ABSTRACT{
 		va_end (ArgList) ;
 
 		m_Label = Buffer;
-	};
+    }
 	int32 ePipeline::GetPipeCount(){
 		EnergyPtr It = m_EnergyList.begin();
 		int32 Count = 1;
@@ -107,7 +110,7 @@ namespace ABSTRACT{
 		    It ++;
 		}
 		return Count;
-	};
+    }
 	void ePipeline::ToString(AnsiString& s){		
 		AnsiString data;
 		EnergyPtr It = m_EnergyList.begin();		
@@ -119,7 +122,7 @@ namespace ABSTRACT{
         //data.resize(count);  没有必要,因为PrintString会从data中取出指定数目count的字符
 		const char* pdata = data.c_str();
 		PrintString(s,TYPE_PIPELINE,m_ID,m_Label,data.size(),pdata);
-	};
+    }
 
 	//注意：输入的字符串格式为：TYPE_PIPELINE@ID@len@Name@LEN@ type@len@data1type@len@data2 ... type@len@dataN
 	uint32  ePipeline::FromString(AnsiString& s,uint32 pos/*=0*/){ 
@@ -127,7 +130,11 @@ namespace ABSTRACT{
 
 		 //基本检查
 		 if(s.size()-pos<9 || (s[pos]!='9' && s[pos+1]!='@')){
+#ifdef _WIN32
 			 	throw std::exception("Pipe.FromString() fail.");
+#else
+                throw GMIS_exceptions::GMIS_exception("Pipe.FromString() fail.");
+#endif
 		 }
 		 
 		 //找ID
@@ -136,7 +143,11 @@ namespace ABSTRACT{
 		 //找到并检查是否为整数；  
 		 uint32 slen = FindInt(s,start,'@');
 		 if(slen==0 || slen>20){
-			 throw std::exception("Pipe.FromString() fail.");
+#ifdef _WIN32
+                throw std::exception("Pipe.FromString() fail.");
+#else
+                throw GMIS_exceptions::GMIS_exception("Pipe.FromString() fail.");
+#endif
 		 }
 		 m_ID = StringToInt(&s[start],slen);
 
@@ -144,7 +155,11 @@ namespace ABSTRACT{
 		 start += slen+1;
 		 slen = FindInt(s,start,'@');
 		 if(slen==0 || slen>20){
-			 throw std::exception("Pipe.FromString() fail.");
+#ifdef _WIN32
+             throw std::exception("Pipe.FromString() fail.");
+#else
+             throw GMIS_exceptions::GMIS_exception("Pipe.FromString() fail.");
+#endif
 		 }
 		 uint32 len = StringToInt(&s[start],slen);
          
@@ -159,14 +174,22 @@ namespace ABSTRACT{
 		 start += len+1;
 		 slen = FindInt(s,start,'@');
 		 if(slen==0 || slen>20){
-			 throw std::exception("Pipe.FromString() fail."); 
+#ifdef _WIN32
+             throw std::exception("Pipe.FromString() fail.");
+#else
+             throw GMIS_exceptions::GMIS_exception("Pipe.FromString() fail.");
+#endif
 		 }
 		 len = StringToInt(&s[start],slen);
 		 
 		 start += slen+1;
 		 if(len ==0)return  start - pos;
          if(len > (s.size()-start)){
-			 throw std::exception("Pipe.FromString() fail.");
+#ifdef _WIN32
+            throw std::exception("Pipe.FromString() fail.");
+#else
+            throw GMIS_exceptions::GMIS_exception("Pipe.FromString() fail.");
+#endif
 		 }
 
 		 //解析各类型的子数据
@@ -233,5 +256,5 @@ namespace ABSTRACT{
 		} // for
         n =  len - pos;
 		return n;
-	};	
+    }
 }//namespace ABSTRACT

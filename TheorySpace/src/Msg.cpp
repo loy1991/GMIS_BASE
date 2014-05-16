@@ -1,7 +1,9 @@
 // Msg.cpp: implementation of the CMsg class.
 //
 //////////////////////////////////////////////////////////////////////
+#ifdef _WIN32
 #pragma warning (disable:4786)
+#endif
 
 #include "Msg.h"
 #include "Pipeline.h"
@@ -102,11 +104,11 @@ CMsg::CMsg(ePipeline* Msg):m_MsgPtr(Msg),m_bReaded(false){
 
 CMsg::CMsg(CMsg& Msg)
 :m_MsgPtr(Msg.Release()),m_bReaded(false){	
-};
+}
 
 CMsg::~CMsg(){
 	Reset();
-};
+}
 
 bool CMsg::IsValid(){ 
 	return m_MsgPtr != NULL;

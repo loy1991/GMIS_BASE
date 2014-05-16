@@ -64,7 +64,7 @@ public:
 
 		list<Object*>              m_DelThreadWorkList;      //等待被物理删除的列表(避免线程体自己执行自己的delete),包括CSystemIOWork和CNerveWork
 
-		CLockedSystemData(){};
+        CLockedSystemData(){}
 	public:
 		CLockedSystemData(CABMutex* mutex);
 		virtual ~CLockedSystemData();
@@ -108,8 +108,8 @@ public:
 		virtual ~CSystemInitData();
 	};
 
-    friend CSystemIOWork;
-	friend CNerveWork;
+    friend class CSystemIOWork;
+    friend class CNerveWork;
 private:
 	//一般神经，中枢神经如果不直接处理信息就把信息交给一般神经，然后有多线程负责信息的处理,
 	CLockPipe*                      m_Nerve;
@@ -131,7 +131,7 @@ protected:
 public:
 //	System(CLockedSystemData* SystemData,CABMutex* ModelMutex, CABMutex* ModelListMutex,CABMutex* SysMutex, CABMutex* SystemListMutex, CSpaceMutex* ChildSitMutex, CLockPipe* CentralNerve, CLockPipe* Nerve,const TCHAR* Name);
 	System(CSystemInitData* InitData);
-	virtual MASS_TYPE  MassType(){ return MASS_SYSTEM;};
+    virtual MASS_TYPE  MassType(){ return MASS_SYSTEM;}
 	virtual ~System();
 	
     virtual bool Activation();

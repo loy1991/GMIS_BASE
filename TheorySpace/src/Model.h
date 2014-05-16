@@ -80,7 +80,7 @@ public:
 		map<int64,CLinkerPipe*>     m_LinkerList;     	
 	    list<CLinkerPipe*>          m_DelLinkerList; //等待被物理删除的列表
     
-		CLockedLinkerList(){};
+        CLockedLinkerList(){}
 	public:
 		CLockedLinkerList(CABMutex* mutex);
 		~CLockedLinkerList();	
@@ -137,7 +137,7 @@ public:
 		map<int64,CCentralNerveWork*>    m_CentralNerveWorkList;  
 		list<Object*>                    m_DelThreadWorkList;      //等待被物理删除的列表(避免线程体自己执行自己的delete),包括ModelIOWork和CentralNerveWork
 
-		CLockedModelData(){};
+        CLockedModelData(){}
 	public:
 		CLockedModelData(CABMutex* mutex);
 		~CLockedModelData();

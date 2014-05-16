@@ -29,6 +29,8 @@
 
 #include "AbstractSpace.h"
 #include <stdlib.h>
+#include <Typedef.h>
+
 #include "ABMutex.h"
 
 namespace ABSTRACT{

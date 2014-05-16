@@ -19,14 +19,14 @@ namespace ABSTRACT{
 class CABMutex  
 {
 public:
-	CABMutex(){};
-	virtual ~CABMutex(){};
+    CABMutex(){}
+    virtual ~CABMutex(){}
 
     virtual void Acquire()
 	{
 		//请根据自己的系统实现此函数
 		assert(0);
-	}; 
+    }
 
     virtual void Release()	
 	{
@@ -38,10 +38,10 @@ public:
 	virtual bool AcquireThis(void* user){
 		Acquire();
 		return TRUE;
-	}; 
+    }
 	virtual void ReleaseThis(void* user){
 		Release();
-	};
+    }
 };
 
 class  CLock
@@ -56,7 +56,7 @@ public:
 	}
     CLock( CABMutex* mutex,void* User): m_Mutex(mutex),m_User(User){
 		assert(mutex);
-		m_User==NULL?m_Mutex->Acquire():m_Mutex->AcquireThis(m_User);
+		m_User==NULL?m_Mutex->Acquire():(void)m_Mutex->AcquireThis(m_User);
 	}
     ~CLock (){
 		m_User==NULL?m_Mutex->Release():m_Mutex->ReleaseThis(m_User);
